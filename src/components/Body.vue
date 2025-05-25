@@ -1,11 +1,7 @@
 <template>
     <div class="container">
         <div class="left">
-            <div class="svg">
-                <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icon-tianqi-qing"></use>
-                </svg>
-            </div>
+            <img src="../assets/icons/01d.png" alt="" class="icon">
             <div class="temperature">
                 <div class="temperature-wrapper">
                     <span class="temperature-value">26</span>
@@ -36,6 +32,7 @@
     justify-content: center;
     align-items: center;
     flex: 1;
+    
 }
 
 .temperature {
@@ -50,22 +47,22 @@
 }
 
 .temperature-value {
-    font-size: 6em;
+    font-size: 9rem;
     line-height: 1;
 }
 
 .temperature-unit {
-    font-size: 2em;
+    font-size: 2rem;
     margin-left: 4px; 
 }
 
 .feels-like {
-    font-size: 1.4em;
+    font-size: 1.9rem;
     margin-top: 8px;
 }
 
 .icon {
-    width: 12em;
-    height: 12em;
+    width: 18rem;
+    height: 18rem;
 }
 </style>
