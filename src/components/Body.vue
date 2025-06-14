@@ -1,10 +1,10 @@
 <template>
     <div class="container">
         <div class="left">
-            <img src="../assets/icons/01d.png" alt="" class="icon">
+            <img :src="getWeatherIcon(current_weather.weather_icon)" alt="" class="icon">
             <div class="temperature">
                 <div class="temperature-wrapper">
-                    <span class="temperature-value">26</span>
+                    <span class="temperature-value">{{ current_weather.temperature }}</span>
                     <span class="temperature-unit">℃</span>
                 </div>
                 <span class="feels-like">Feels Like 25°</span>
@@ -16,7 +16,7 @@
                 <div class="text-group">
                     <div class="base-text">Sunrise</div>
                     <div class="text-suffix">
-                        <div class="text-bold">9.16</div>
+                        <div class="text-bold">{{formatTime(current_weather.rise.sunrise)}}</div>
                         <div class="min-text">AM</div>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                 <div class="text-group">
                     <div class="base-text">Sunset</div>
                     <div class="text-suffix">
-                        <div class="text-bold">5.25</div>
+                        <div class="text-bold">{{formatTime(current_weather.rise.sunset)}}</div>
                         <div class="min-text">PM</div>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                 <div class="text-group">
                     <div class="base-text">Wind</div>
                     <div class="text-suffix">
-                        <div class="text-bold">3.44</div>
+                        <div class="text-bold">{{current_weather.wind_power}}</div>
                         <div class="min-text">mph</div>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                 <div class="text-group">
                     <div class="base-text">Humidity</div>
                     <div class="text-suffix">
-                        <div class="text-bold">83</div>
+                        <div class="text-bold">{{current_weather.humidity}}</div>
                         <div class="min-text">%</div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                 <div class="text-group">
                     <div class="base-text">Pressure</div>
                     <div class="text-suffix">
-                        <div class="text-bold">1015</div>
+                        <div class="text-bold">{{current_weather.pressure}}</div>
                         <div class="min-text">kPa</div>
                     </div>
                 </div>
@@ -86,17 +86,47 @@
                 <div class="text-group">
                     <div class="base-text">Air Quality</div>
                     <div class="text-suffix">
-                        <div class="text-bold">5</div>
-                        <div class="min-text">Very Poor</div>
+                        <div class="text-bold">{{current_weather.aqi.level}}</div>
+                        <div class="min-text">{{current_weather.aqi.message.message}}</div>
                     </div>
                 </div>
             </div>
 
 
-            
+
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    props: ['current_weather'],
+    methods: {
+        getWeatherIcon(weather_icon) {
+            if (weather_icon) {
+                return `/src/assets/icons/${weather_icon}`;
+            }
+        },
+        // 添加时间格式化方法
+        formatTime(timeStr) {
+            if (!timeStr) return '';
+            
+            // 分割小时和分钟
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            
+            // 判断上午/下午
+            const period = hours >= 12 ? 'PM' : 'AM';
+            
+            // 转换为12小时制并移除前导零
+            let hour12 = hours % 12;
+            hour12 = hour12 === 0 ? 12 : hour12; // 处理12:00的情况
+            
+            // 返回格式化后的时间
+            return `${hour12}:${minutes.toString().padStart(2, '0')}`;
+        }
+    }
+}
+</script>
 
 <style scoped>
 .container {
@@ -184,14 +214,17 @@
     align-items: baseline;
     gap: 4px;
 }
-.text-bold{
+
+.text-bold {
     font-weight: bold;
     font-size: 2rem;
 }
-.base-text{
+
+.base-text {
     font-size: 1.4rem;
 }
-.min-text{
+
+.min-text {
     font-size: 1.2rem;
 }
 </style>

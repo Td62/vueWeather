@@ -1,42 +1,26 @@
 <template>
     <div class="footer-container">
-        <div class="footer-item-container">
-            <div class="day">Mon</div>
-            <img src="../assets/icons/02d.png" alt="" class="min_icon">
-            <div class="footer-text">12<span>/</span>16</div>
-        </div>
-        <div class="footer-item-container">
-            <div class="day">Tue</div>
-            <img src="../assets/icons/03d.png" alt="" class="min_icon">
-            <div class="footer-text">12<span>/</span>16</div>
-        </div>
-        <div class="footer-item-container">
-            <div class="day">Wed</div>
-            <img src="../assets/icons/04d.png" alt="" class="min_icon">
-            <div class="footer-text">12<span>/</span>16</div>
-        </div>
-        <div class="footer-item-container">
-            <div class="day">Thu</div>
-            <img src="../assets/icons/09d.png" alt="" class="min_icon">
-            <div class="footer-text">12<span>/</span>16</div>
-        </div>
-        <div class="footer-item-container">
-            <div class="day">Fri</div>
-            <img src="../assets/icons/10d.png" alt="" class="min_icon">
-            <div class="footer-text">12<span>/</span>16</div>
-        </div>
-        <div class="footer-item-container">
-            <div class="day">Sat</div>
-            <img src="../assets/icons/11d.png" alt="" class="min_icon">
-            <div class="footer-text">12<span>/</span>16</div>
-        </div>
-        <div class="footer-item-container">
-            <div class="day">Sun</div>
-            <img src="../assets/icons/13d.png" alt="" class="min_icon">
-            <div class="footer-text">12<span>/</span>16</div>
+
+        <div class="footer-item-container" v-for="(day, index) in forecast7days.data" :key="index">
+            <div class="day">{{forecast7days.nextSevenDaysData[index].day}}</div>
+            <img :src="getWeatherIcon(day.weather_icon)" class="min_icon">
+            <div class="footer-text">{{day.min_temp}}<span>/</span>{{day.max_temp}}</div>
         </div>
     </div>
 </template>
+<script>
+export default {
+    props: ['forecast7days'],
+    methods:{
+        getWeatherIcon(weather_icon) {
+            if (weather_icon) {
+                return `/src/assets/icons/${weather_icon}`;
+            }
+        },
+    }
+}   
+
+    </script>
 
 <style scoped>
 .footer-container{

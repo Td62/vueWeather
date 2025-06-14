@@ -10,13 +10,14 @@
         <div class="separator" v-if="index < 2"></div>
       </div>
     </div>
-    <div class="location">ShenZhen,LongHua</div>
+    <div class="location">{{location}}</div>
     <div class="date">{{ currentDate }}</div>
   </div>
 </template>
 
 <script>
 export default {
+  props:['location'],
   data() {
     return {
       currentTime: '00:00:00',
@@ -37,7 +38,7 @@ export default {
     },
     
     updateTime() {
-      // 立即更新当前时间（不等待动画）
+      // 立即更新当前时间
       this.currentTime = this.getPreciseTime()
       
       // 计算到下一秒的精确时间
@@ -76,31 +77,15 @@ export default {
         this.updateDate()
         this.updateTime() // 确保午夜立即更新时间
       }, timeUntilMidnight)
-    },
-    
-    async syncWithServerTime() {
-      try {
-        const response = await fetch('https://worldtimeapi.org/api/ip')
-        const data = await response.json()
-        const serverTime = new Date(data.datetime)
-        this.currentTime = serverTime.toLocaleTimeString('en-US', { hour12: false })
-        this.currentDate = serverTime.toLocaleDateString('en-US', {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        })
-      } catch (e) {
-        console.log('使用本地时间', e)
-      }
     }
   },
   mounted() {
-    // 初始同步时间
-    this.syncWithServerTime()
+    // 初始设置时间
+    this.currentTime = this.getPreciseTime()
+    this.updateDate()
+    
     // 启动精确计时器
     this.updateTime()
-    this.updateDate()
   },
   beforeUnmount() {
     clearTimeout(this.timeInterval)
